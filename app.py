@@ -4,9 +4,14 @@ import os
 from dotenv import load_dotenv
 from openai import OpenAI
 
-# .envファイルからAPIキーを読み込む
-load_dotenv()
-OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+# Cloud（本番）とLocal（自分のPC）の両方に対応させる
+if "OPENAI_API_KEY" in st.secrets:
+    # Cloudに鍵がある場合（本番環境）
+    OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
+else:
+    # Cloudにない場合、.envを見る（ローカル環境）
+    load_dotenv()
+    OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
 # AIの準備
 ai_client = OpenAI(api_key=OPENAI_API_KEY)
